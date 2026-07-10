@@ -23,7 +23,7 @@ public class Taxpayer {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "Phone", nullable = false)
     private String phone;
 
     @Column(nullable = false)
