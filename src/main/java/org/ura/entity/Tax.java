@@ -43,16 +43,23 @@ public class Tax {
     public enum Status { DRAFT, DECLARED, ASSESSED, REJECTED, PARTIALLY_PAID, PAID }
 
     // getters and setters — Alt+Insert in IntelliJ, select all fields
-    public Long getId() { return id; }
-    public Taxpayer getTaxpayer() { return taxpayer; }
-    public void setTaxpayer(Taxpayer taxpayer) { this.taxpayer = taxpayer; }
-    public TaxType getTaxType() { return taxType; }
+    public Long getId() {
+        return id; }
+    public Taxpayer getTaxpayer() {
+        return taxpayer; }
+    public void setTaxpayer(Taxpayer taxpayer) {
+        this.taxpayer = taxpayer; }
+    public TaxType getTaxType() {
+        return taxType; }
     public void setTaxType(TaxType taxType) { this.taxType = taxType; }
     public String getPeriod() { return period; }
     public void setPeriod(String period) { this.period = period; }
-    public BigDecimal getDeclaredAmount() { return declaredAmount; }
+    public BigDecimal getDeclaredAmount()
+    { return declaredAmount; }
     public void setDeclaredAmount(BigDecimal declaredAmount) { this.declaredAmount = declaredAmount; }
-    public BigDecimal getAssessedAmount() { return assessedAmount; }
+    public BigDecimal getAssessedAmount()
+    { return assessedAmount; }
+
     public void setAssessedAmount(BigDecimal assessedAmount) { this.assessedAmount = assessedAmount; }
     public BigDecimal getAmountPaid() { return amountPaid; }
     public void setAmountPaid(BigDecimal amountPaid) { this.amountPaid = amountPaid; }
