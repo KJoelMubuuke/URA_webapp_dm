@@ -3,9 +3,11 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.example</groupId>
+
+    <groupId>org.ura</groupId>
     <artifactId>URA_Tax</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -14,6 +16,8 @@
     </properties>
 
     <dependencies>
+
+        <!-- Hibernate ORM -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -21,13 +25,11 @@
         </dependency>
 
         <!-- MySQL JDBC driver -->
-
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.4.0</version>
         </dependency>
-
 
         <!-- Password hashing -->
         <dependency>
@@ -36,7 +38,6 @@
             <version>0.4</version>
         </dependency>
 
-
         <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -44,13 +45,52 @@
             <version>2.0.13</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/javax.faces/jsf-api -->
+        <!-- Jakarta Faces (JSF 4.x — modern replacement for javax.faces) -->
         <dependency>
-            <groupId>javax.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>1.2_15-06</version>
-            <scope>compile</scope>
+            <groupId>jakarta.faces</groupId>
+            <artifactId>jakarta.faces-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PrimeFaces UI Component Library -->
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>14.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+        <!-- Jakarta Servlet API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta CDI (for @Named, @RequestScoped beans) -->
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- WAR plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
