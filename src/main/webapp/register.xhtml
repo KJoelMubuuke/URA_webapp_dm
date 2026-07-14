@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>URA | Register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(ellipse at 40% 80%, #1a3a2a 0%, #0d1117 60%);
+            padding: 2rem 0;
+        }
+        .reg-wrap { width: 500px; }
+        .reg-header { text-align: center; margin-bottom: 1.5rem; }
+        .reg-header .logo { font-size: 2.5rem; }
+        .reg-header h1 { font-size: 1.4rem; font-weight: 700; color: #e6edf3; margin-top: 0.4rem; }
+        .reg-header p  { font-size: 0.82rem; color: #8b949e; }
+        .reg-card {
+            background: #161b22; border: 1px solid #21262d; border-radius: 14px;
+            padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group.full { grid-column: 1 / -1; }
+        .form-group label { display: block; font-size: 0.78rem; font-weight: 500; color: #8b949e; margin-bottom: 0.35rem; }
+        .form-group .ui-inputtext, .form-group .ui-password .ui-inputtext {
+            width: 100% !important; background: #0d1117 !important; border: 1px solid #30363d !important;
+            border-radius: 8px !important; color: #e6edf3 !important;
+            padding: 0.65rem 0.85rem !important; font-size: 0.875rem !important;
+        }
+        .form-group .ui-inputtext:focus { border-color: #3fb950 !important; }
+        .btn-reg {
+            width: 100%; background: linear-gradient(135deg, #238636, #2ea043) !important;
+            border: none !important; border-radius: 8px !important;
+            padding: 0.75rem !important; font-size: 0.95rem !important;
+            font-weight: 600 !important; cursor: pointer !important; margin-top: 0.75rem;
+        }
+        .reg-footer { text-align: center; margin-top: 1rem; font-size: 0.82rem; color: #8b949e; }
+        .reg-footer a { color: #58a6ff; text-decoration: none; }
+    </style>
+</h:head>
+<h:body>
+    <div class="reg-wrap">
+        <div class="reg-header">
+            <div class="logo">🏛</div>
+            <h1>Create Taxpayer Account</h1>
+            <p>Uganda Revenue Authority · Tax Registration</p>
+        </div>
+        <div class="reg-card">
+            <p:growl id="growl" life="5000" showDetail="true"/>
+            <h:form id="regForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <p:inputText value="#{registerBean.firstName}" placeholder="John" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <p:inputText value="#{registerBean.lastName}" placeholder="Doe" required="true"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Tax Identification Number (TIN)</label>
+                        <p:inputText value="#{registerBean.tin}" placeholder="1000000000" required="true"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Email Address</label>
+                        <p:inputText value="#{registerBean.email}" placeholder="email@example.com" required="true"/>
+                    </div>
+                    <div class="form-group full">
+                        <label>Phone Number</label>
+                        <p:inputText value="#{registerBean.phone}" placeholder="07XXXXXXXX" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <p:password value="#{registerBean.password}" feedback="true" required="true"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <p:password value="#{registerBean.confirmPassword}" feedback="false" required="true"/>
+                    </div>
+                </div>
+                <p:commandButton value="Register Account" action="#{registerBean.register}"
+                                 styleClass="btn-reg" ajax="false"/>
+            </h:form>
+            <div class="reg-footer">
+                Already have an account? <a href="/URA_Tax/login.xhtml">Sign in</a>
+            </div>
+        </div>
+    </div>
+</h:body>
+</html>
