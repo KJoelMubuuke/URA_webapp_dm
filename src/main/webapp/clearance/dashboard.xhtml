@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="nav">
+        <a href="/URA_Tax/clearance/dashboard.xhtml" class="active">Issue Clearance</a>
+    </ui:define>
+
+    <ui:define name="content">
+        <h2 style="font-size:1.4rem;font-weight:700;color:#e6edf3;margin-bottom:1.5rem;">
+            Clearance Officer Dashboard
+        </h2>
+
+        <div style="display:grid;grid-template-columns:1fr 380px;gap:1.5rem;align-items:start;">
+
+            <!-- Left: PAID taxes -->
+            <div class="ura-card">
+                <div class="ura-card-title">Fully Paid Taxes — Eligible for Clearance (#{clearanceBean.paidTaxes.size()})</div>
+                <h:form id="paidForm">
+                    <p:dataTable value="#{clearanceBean.paidTaxes}" var="tax"
+                                 emptyMessage="No fully paid taxes yet." stripedRows="true" style="width:100%">
+                        <p:column headerText="ID" style="width:50px"><h:outputText value="#{tax.id}"/></p:column>
+                        <p:column headerText="Taxpayer">
+                            <h:outputText value="#{tax.taxpayer.firstName} #{tax.taxpayer.lastName}"/>
+                        </p:column>
+                        <p:column headerText="TIN"><h:outputText value="#{tax.taxpayer.tin}"/></p:column>
+                        <p:column headerText="Tax Type"><h:outputText value="#{tax.taxType}"/></p:column>
+                        <p:column headerText="Period"><h:outputText value="#{tax.period}"/></p:column>
+                        <p:column headerText="Amount (UGX)">
+                            <h:outputText value="#{tax.assessedAmount}">
+                                <f:convertNumber type="currency" currencySymbol="" minFractionDigits="0"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Action" style="width:90px">
+                            <p:commandButton value="Issue" styleClass="ui-button-sm ui-button-success"
+                                             actionListener="#{clearanceBean.selectTax(tax)}"
+                                             update=":clearancePanel" process="@this"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </div>
+
+            <!-- Right: Issue Panel + Certificate -->
+            <div>
+                <div class="ura-card" id="clearancePanel">
+                    <div class="ura-card-title">Issue Certificate</div>
+                    <h:form id="issueForm">
+                        <p:panelGrid rendered="#{clearanceBean.selectedTax != null}" columns="1" style="width:100%">
+                            <p style="font-size:0.82rem;color:#8b949e;margin-bottom:1rem;">
+                                Tax ID <strong style="color:#3fb950;">#{clearanceBean.selectedTax.id}</strong>
+                                — #{clearanceBean.selectedTax.taxpayer.firstName} #{clearanceBean.selectedTax.taxpayer.lastName}
+                            </p>
+                            <p:commandButton value="🏅 Issue Clearance Certificate"
+                                             styleClass="ui-button-success"
+                                             actionListener="#{clearanceBean.issueClearance}"
+                                             update=":clearancePanel :paidForm growl"
+                                             process="issueForm"
+                                             style="width:100%;"/>
+                        </p:panelGrid>
+
+                        <!-- Show issued certificate -->
+                        <p:panelGrid rendered="#{clearanceBean.issuedClearance != null}" columns="1"
+                                     style="width:100%;margin-top:1rem;background:#1a2f1a;border:1px solid #238636;border-radius:10px;padding:1rem;">
+                            <p style="font-size:0.9rem;color:#3fb950;font-weight:600;">✅ Certificate Issued!</p>
+                            <p style="font-size:0.8rem;color:#8b949e;margin-top:0.5rem;">
+                                Cert No: <strong style="color:#e6edf3;">#{clearanceBean.issuedClearance.certificateNumber}</strong><br/>
+                                Valid Until: #{clearanceBean.issuedClearance.validUntil}
+                            </p>
+                        </p:panelGrid>
+
+                        <p:outputPanel rendered="#{clearanceBean.selectedTax == null and clearanceBean.issuedClearance == null}">
+                            <p style="color:#8b949e;font-size:0.85rem;text-align:center;padding:2rem 0;">← Select a tax record</p>
+                        </p:outputPanel>
+                    </h:form>
+                </div>
+
+                <!-- Verify Certificate -->
+                <div class="ura-card">
+                    <div class="ura-card-title">Verify Certificate</div>
+                    <h:form id="verifyForm">
+                        <p:inputText value="#{clearanceBean.certNumberToVerify}"
+                                     placeholder="URA-CLR-2025-XXXXXX" style="width:100%;margin-bottom:0.75rem;"/>
+                        <p:commandButton value="🔍 Verify" styleClass="ui-button-info"
+                                         actionListener="#{clearanceBean.verifyCertificate}"
+                                         update="verifyResult growl" process="verifyForm"
+                                         style="width:100%;"/>
+                        <p:outputPanel id="verifyResult" style="margin-top:0.75rem;">
+                            <p:panelGrid rendered="#{clearanceBean.verifiedClearance != null}" columns="1"
+                                         style="background:#0d1117;border-radius:8px;padding:0.75rem;font-size:0.8rem;">
+                                <p style="color:#3fb950;font-weight:600;">✅ Valid Certificate</p>
+                                <p style="color:#8b949e;margin-top:0.4rem;">
+                                    Taxpayer: #{clearanceBean.verifiedClearance.tax.taxpayer.firstName}
+                                    #{clearanceBean.verifiedClearance.tax.taxpayer.lastName}<br/>
+                                    Issued: #{clearanceBean.verifiedClearance.issuedAt}<br/>
+                                    Valid Until: #{clearanceBean.verifiedClearance.validUntil}
+                                </p>
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </h:form>
+                </div>
+            </div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

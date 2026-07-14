@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/WEB-INF/template.xhtml">
+
+    <ui:define name="nav">
+        <a href="/URA_Tax/taxpayer/dashboard.xhtml" class="active">Dashboard</a>
+        <a href="/URA_Tax/taxpayer/declare.xhtml">New Declaration</a>
+        <a href="/URA_Tax/taxpayer/payment.xhtml">Make Payment</a>
+    </ui:define>
+
+    <ui:define name="content">
+        <h2 style="font-size:1.4rem;font-weight:700;color:#e6edf3;margin-bottom:1.5rem;">
+            Welcome, #{sessionBean.loggedInUser.firstName} 👋
+        </h2>
+
+        <!-- Stats -->
+        <div class="stat-grid" style="margin-bottom:1.5rem;">
+            <div class="stat-card">
+                <div class="stat-value">#{taxpayerDashboardBean.myTaxes.size()}</div>
+                <div class="stat-label">Total Declarations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#d29922;">
+                    #{taxpayerDashboardBean.myTaxes.stream().filter(t -> t.status.name() == 'DECLARED').count()}
+                </div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#3fb950;">
+                    #{taxpayerDashboardBean.myTaxes.stream().filter(t -> t.status.name() == 'PAID').count()}
+                </div>
+                <div class="stat-label">Fully Paid</div>
+            </div>
+        </div>
+
+        <!-- Declarations Table -->
+        <div class="ura-card">
+            <div class="ura-card-title">My Tax Declarations</div>
+            <p:dataTable value="#{taxpayerDashboardBean.myTaxes}" var="tax"
+                         emptyMessage="No declarations found. Submit your first declaration."
+                         stripedRows="true" style="width:100%">
+                <p:column headerText="ID" style="width:60px">
+                    <h:outputText value="#{tax.id}"/>
+                </p:column>
+                <p:column headerText="Tax Type">
+                    <h:outputText value="#{tax.taxType}"/>
+                </p:column>
+                <p:column headerText="Period">
+                    <h:outputText value="#{tax.period}"/>
+                </p:column>
+                <p:column headerText="Declared Amount">
+                    <h:outputText value="#{tax.declaredAmount}">
+                        <f:convertNumber type="currency" currencySymbol="UGX " minFractionDigits="0"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Assessed Amount">
+                    <h:outputText value="#{tax.assessedAmount != null ? tax.assessedAmount : '—'}"/>
+                </p:column>
+                <p:column headerText="Paid">
+                    <h:outputText value="#{tax.amountPaid}">
+                        <f:convertNumber type="currency" currencySymbol="UGX " minFractionDigits="0"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Status">
+                    <h:outputText value="#{tax.status}" styleClass="badge badge-#{tax.status.name().toLowerCase().replace('_','-')}"/>
+                </p:column>
+            </p:dataTable>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="ura-card">
+            <div class="ura-card-title">Quick Actions</div>
+            <p:button value="+ New Declaration" outcome="/taxpayer/declare"
+                      styleClass="ui-button-success" style="margin-right:0.5rem;"/>
+            <p:button value="💳 Make Payment" outcome="/taxpayer/payment"
+                      styleClass="ui-button-warning"/>
+        </div>
+    </ui:define>
+
+</ui:composition>
+</html>

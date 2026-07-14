@@ -69,12 +69,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Jakarta CDI (for @Named, @RequestScoped beans) -->
+        <!-- Jakarta CDI (for @Named, @RequestScoped, @Inject beans) -->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <version>4.0.1</version>
-            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Inject (standalone @Inject annotation) -->
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.1</version>
         </dependency>
 
     </dependencies>
