@@ -39,4 +39,19 @@ public class TaxDAO {
             session.getTransaction().commit();
         }
     }
+
+    public List<Tax> findByStatus(Tax.Status status) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Tax> query = session.createQuery(
+                    "from Tax t where t.status = :status order by t.id desc", Tax.class);
+            query.setParameter("status", status);
+            return query.list();
+        }
+    }
+
+    public List<Tax> findAll() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Tax t order by t.id desc", Tax.class).list();
+        }
+    }
 }
